@@ -8,11 +8,14 @@ phases:
         - echo Logging into AWS ECR...
         - aws --version
         - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+        - IMAGE_REPO_NAME=528578237961.dkr.ecr.us-east-1.amazonaws.com/keshri-registry
+        - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo I am into Build Phase...
       - echo Build started on `date`
       - echo Building the Docker Image...
+      - print
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       - mvn clean package
