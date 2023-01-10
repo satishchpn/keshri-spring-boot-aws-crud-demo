@@ -11,5 +11,5 @@ phases:
      
 artifacts:
   files:
-    - keshri-spring-boot-aws-crud-demo.jar
+    - target/keshri-spring-boot-aws-crud-demo.jar
   discard-paths: yes
