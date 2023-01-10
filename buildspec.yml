@@ -2,20 +2,16 @@ version: 0.1
 
 phases:
   pre_build:
+    on-failure: ABORT
     commands:
-          #Abort the script at the first error
-        - set -e
-          #Return the exit status of the last command in the pipe that returned a non-zero return value.
-        - set -o pipefail            
         - echo I am into Pre-Build Phase...
         - mvn clean install
         - echo Logging into AWS ECR...
         - aws --version
         - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
   build:
+    on-failure: ABORT
     commands:
-          #Abort the script at the first error
-        - set -e
         - echo I am into Build Phase...
         - echo Build started on `date`
         - echo Building the Docker Image...
@@ -23,9 +19,8 @@ phases:
         - docker tag keshri-registry:latest 528578237961.dkr.ecr.us-east-1.amazonaws.com/keshri-registry:latest
         - mvn clean package
   post_build:
+    on-failure: ABORT
     commands:
-          #Abort the script at the first error
-        - set -e
         - echo I am into Post Build Phase...
         - echo Build completed on `date`
         - echo Pushing the Docker Image...
