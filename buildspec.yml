@@ -11,6 +11,9 @@ phases:
           # Get URI from ECR and use as IMAGE_REPO_NAME
         - IMAGE_REPO_NAME=528578237961.dkr.ecr.us-east-1.amazonaws.com/keshri-registry
         - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+        - printf "IMAGE_REPO_NAME is  $IMAGE_REPO_NAME\n"
+        - printf "IMAGE_TAG is  $IMAGE_TAG\n"
+        - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
   build:
     commands:
       - echo I am into Build Phase...
