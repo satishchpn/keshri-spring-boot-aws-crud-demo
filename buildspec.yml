@@ -12,27 +12,13 @@ phases:
         - echo Logging into AWS ECR...
         - aws --version
         - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-          # Get URI from ECR and use as IMAGE_REPO_NAME
-        - IMAGE_REPO_NAME=528578237961.dkr.ecr.us-east-1.amazonaws.com/keshri-registry
-        - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-        - printf "CODEBUILD_BUILD_ID is  $CODEBUILD_BUILD_ID\n"
-        - printf "IMAGE_REPO_NAME is  $IMAGE_REPO_NAME\n"
-        - printf "IMAGE_TAG is  $IMAGE_TAG\n"
-        - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
   build:
     commands:
           #Abort the script at the first error
         - set -e
-          #Return the exit status of the last command in the pipe that returned a non-zero return value.
-        - set -o pipefail
         - echo I am into Build Phase...
         - echo Build started on `date`
         - echo Building the Docker Image...
-        - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
-        - echo AWS_ACCOUNT_ID $AWS_ACCOUNT_ID
-        - printf "AWS_DEFAULT_REGION is  $AWS_DEFAULT_REGION\n"
-        - printf "IMAGE_REPO_NAME is  $IMAGE_REPO_NAME\n"
-        - printf "IMAGE_TAG is  $IMAGE_TAG\n"
         - docker build -t keshri-registry:latest .
         - docker tag keshri-registry:latest 528578237961.dkr.ecr.us-east-1.amazonaws.com/keshri-registry:latest
         - mvn clean package
@@ -40,12 +26,10 @@ phases:
     commands:
           #Abort the script at the first error
         - set -e
-          #Return the exit status of the last command in the pipe that returned a non-zero return value.
-        - set -o pipefail
         - echo I am into Post Build Phase...
         - echo Build completed on `date`
         - echo Pushing the Docker Image...
-        - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+        - docker push 528578237961.dkr.ecr.us-east-1.amazonaws.com/keshri-registry:latest
         - echo writing image definitions file...
         - printf '[{"name":"keshri-spring-boot-aws-crud-demo","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
         - cat imagedefinitions.json
