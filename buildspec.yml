@@ -7,8 +7,8 @@ phases:
         - mvn clean install
         - echo Logging into AWS ECR...
         - aws --version
-        - $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 070943686835.dkr.ecr.us-east-1.amazonaws.com)
-        - REPOSITORY_URI=070943686835.dkr.ecr.us-east-1.amazonaws.com/keshri-registry
+        - $(aws ecr get-login --region us-east-1 --no-include-email)
+        - REPOSITORY_URI= 070943686835.dkr.ecr.us-east-1.amazonaws.com/keshri-registry
         - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
         - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
         
@@ -26,7 +26,7 @@ phases:
       - echo Pushing the Docker Image...
       - docker push $REPOSITORY_URI:latest
       - echo writing image definitions file...
-      - printf '[{"name":"keshri-spring-boot-aws-crud-demo","imgUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"keshri-spring-boot-aws-crud-demo","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - cat imagedefinitions.json
      
 artifacts:
