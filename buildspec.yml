@@ -17,7 +17,7 @@ phases:
       - echo I am into Build Phase...
       - echo Build started on `date`
       - echo Building the Docker Image...
-      - docker build -t $REPOSITORY_URI:latest .
+      - docker build -t $REPOSITORY_URI:0.0.1-SNAPSHOT .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
       - mvn clean package
   post_build:
