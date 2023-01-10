@@ -1,11 +1,12 @@
-set -e
-set -o pipefail
-
 version: 0.1
 
 phases:
   pre_build:
     commands:
+            #Abort the script at the first error
+        -   set -e
+            #Return the exit status of the last command in the pipe that returned a non-zero return value.
+        -   set -o pipefail            
         - echo I am into Pre-Build Phase...
         - mvn clean install
         - echo Logging into AWS ECR...
@@ -20,26 +21,34 @@ phases:
         - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
   build:
     commands:
-      - echo I am into Build Phase...
-      - echo Build started on `date`
-      - echo Building the Docker Image...
-      - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
-      - echo AWS_ACCOUNT_ID $AWS_ACCOUNT_ID
-      - printf "AWS_DEFAULT_REGION is  $AWS_DEFAULT_REGION\n"
-      - printf "IMAGE_REPO_NAME is  $IMAGE_REPO_NAME\n"
-      - printf "IMAGE_TAG is  $IMAGE_TAG\n"
-      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $IMAGE_REPO_NAME:$IMAGE_TAG
-      - mvn clean package
+            #Abort the script at the first error
+        -   set -e
+            #Return the exit status of the last command in the pipe that returned a non-zero return value.
+        -   set -o pipefail 
+        - echo I am into Build Phase...
+        - echo Build started on `date`
+        - echo Building the Docker Image...
+        - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
+        - echo AWS_ACCOUNT_ID $AWS_ACCOUNT_ID
+        - printf "AWS_DEFAULT_REGION is  $AWS_DEFAULT_REGION\n"
+        - printf "IMAGE_REPO_NAME is  $IMAGE_REPO_NAME\n"
+        - printf "IMAGE_TAG is  $IMAGE_TAG\n"
+        - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+        - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $IMAGE_REPO_NAME:$IMAGE_TAG
+        - mvn clean package
   post_build:
     commands:
-      - echo I am into Post Build Phase...
-      - echo Build completed on `date`
-      - echo Pushing the Docker Image...
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
-      - echo writing image definitions file...
-      - printf '[{"name":"keshri-spring-boot-aws-crud-demo","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json
+            #Abort the script at the first error
+        -   set -e
+            #Return the exit status of the last command in the pipe that returned a non-zero return value.
+        -   set -o pipefail 
+        - echo I am into Post Build Phase...
+        - echo Build completed on `date`
+        - echo Pushing the Docker Image...
+        - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+        - echo writing image definitions file...
+        - printf '[{"name":"keshri-spring-boot-aws-crud-demo","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+        - cat imagedefinitions.json
      
 artifacts:
   files:
