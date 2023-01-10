@@ -18,10 +18,10 @@ phases:
       - echo Building the Docker Image...
       - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
       - printf "AWS_DEFAULT_REGION is  $AWS_DEFAULT_REGION\n"
-      - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
+      - printf "IMAGE_REPO_NAME is  $IMAGE_REPO_NAME\n"
       - printf "IMAGE_TAG is  $IMAGE_TAG\n"
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $IMAGE_REPO_NAME:$IMAGE_TAG
       - mvn clean package
   post_build:
     commands:
