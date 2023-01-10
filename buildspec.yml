@@ -17,6 +17,7 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker Image...
       - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
+      - echo AWS_ACCOUNT_ID $AWS_ACCOUNT_ID
       - printf "AWS_DEFAULT_REGION is  $AWS_DEFAULT_REGION\n"
       - printf "IMAGE_REPO_NAME is  $IMAGE_REPO_NAME\n"
       - printf "IMAGE_TAG is  $IMAGE_TAG\n"
