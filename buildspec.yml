@@ -3,15 +3,15 @@ version: 0.1
 phases:
   pre_build:
     commands:
-            #Abort the script at the first error
-        -   set -e
-            #Return the exit status of the last command in the pipe that returned a non-zero return value.
-        -   set -o pipefail            
+          #Abort the script at the first error
+        - set -e
+          #Return the exit status of the last command in the pipe that returned a non-zero return value.
+        - set -euxo pipefail            
         - echo I am into Pre-Build Phase...
         - mvn clean install
         - echo Logging into AWS ECR...
         - aws --version
-        - $(aws ecr get-login-password-stdin --region $AWS_DEFAULT_REGION --no-include-email)
+        - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
           # Get URI from ECR and use as IMAGE_REPO_NAME
         - IMAGE_REPO_NAME=528578237961.dkr.ecr.us-east-1.amazonaws.com/keshri-registry
         - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
@@ -21,10 +21,10 @@ phases:
         - printf "AWS_ACCOUNT_ID is  $AWS_ACCOUNT_ID\n"
   build:
     commands:
-            #Abort the script at the first error
-        -   set -e
-            #Return the exit status of the last command in the pipe that returned a non-zero return value.
-        -   set -o pipefail 
+          #Abort the script at the first error
+        - set -e
+          #Return the exit status of the last command in the pipe that returned a non-zero return value.
+        - set -euxo pipefail
         - echo I am into Build Phase...
         - echo Build started on `date`
         - echo Building the Docker Image...
@@ -38,10 +38,10 @@ phases:
         - mvn clean package
   post_build:
     commands:
-            #Abort the script at the first error
-        -   set -e
-            #Return the exit status of the last command in the pipe that returned a non-zero return value.
-        -   set -o pipefail 
+          #Abort the script at the first error
+        - set -e
+          #Return the exit status of the last command in the pipe that returned a non-zero return value.
+        - set -euxo pipefail
         - echo I am into Post Build Phase...
         - echo Build completed on `date`
         - echo Pushing the Docker Image...
