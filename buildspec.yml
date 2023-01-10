@@ -1,1 +1,15 @@
+version=0.1
 
+phases:
+  build:
+    commands:
+      - echo Entered into Build Phase...
+      - mvn clean package
+  post_build:
+    commands:
+      - Build Phase completed Successfully...
+     
+artifacts:
+  files:
+    - keshri-spring-boot-aws-crud-demo.jar
+  discard-paths: yes
